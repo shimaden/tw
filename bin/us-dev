@@ -7,6 +7,8 @@
 # The application 'us' is installed as part of a gem, and
 # this file is here to facilitate running it.
 #
+ENV['TWBT'] = ""
+
 sigint_handler = Proc.new() do
   $stderr.puts()
   $stderr.puts("あ～ん")
@@ -39,7 +41,7 @@ end
 
 PLATFORM = platform()
 if PLATFORM =~ /Linux/i then
-  $LOAD_PATH.push("/usr/local/us/lib")
+  $LOAD_PATH.push("#{ENV['HOME']}/mysrc/ruby/us/lib")
 elsif PLATFORM =~ /Windows_NT/i then
   $LOAD_PATH.push('P:/mysrc/ruby/us/lib')
 else
