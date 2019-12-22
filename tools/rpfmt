@@ -1,0 +1,116 @@
+#!/usr/bin/ruby
+# encoding: UTF-8
+# このファイルはＵＴＦ－８です。
+
+# status code which us/tm returns when 'No' is selected in 'Yes/No' prompt.
+EXIT_BY_NO = 10
+
+=begin
+class Client
+  def self.client(cmd)
+    if cmd == "us" || cmd == "tm" then
+      return cmd
+    else
+      return "us"
+    end
+  end
+end
+=end
+
+=begin
+class MainOptions
+  attr_reader :status, :screen_name
+
+  def initialize(twitter_url)
+    # https://twitter.com/YahooNewsTopics/status/427601923017949185
+    ary = twitter_url.split("/")
+    @status = ary[ary.size - 1]
+    @screen_name = ary[ary.size - 3]
+  end
+end
+=end
+
+def get_client_name(arg)
+  if arg == "us" || arg == "tm" then
+    return arg
+  else
+    return "us"
+  end
+end
+
+def get_dest_status_id(tweet_url)
+  # URL format: https://twitter.com/YahooNewsTopics/status/427601923017949185
+  ary = tweet_url.split("/")
+  status = ary[ary.size - 1]
+  return status
+end
+
+=begin
+class InvokingOptions
+  def self.get_options(argv)
+    opts = argv[3..argv.size()].select {|o| o == '--cc'}
+    return opts
+  end
+end
+=end
+
+def get_cc(argv)
+  return argv.include?("--cc") ? ["--cc"] : []
+end
+
+class AdditionalOptions
+  def self.option_array(argv)
+    opts = argv[3..argv.size()]
+    return opts.nil? ? [] : opts
+  end
+end
+
+def create_command_line(client_name, message, dest_url)
+  client         = get_client_name(client_name)
+  dest_status_id = get_dest_status_id(dest_url)
+  cmd     = [client, "--command-line-only",
+                     "--reply-format",      dest_status_id,
+                     "--message",           message
+            ]
+  # us 本体を --cc に対応させろ。
+  cc = get_cc(ARGV)
+  cmd.concat(cc) # TODO
+  cmdline = nil
+  IO.popen(cmd, "r") do |io|
+    cmdline = io.gets()
+    if cmdline != nil then
+      cmdline.chomp!
+    end
+  end
+  if $?.exitstatus() > 0 then
+    $stderr.puts("Error: #{client} terminated with status #{$?.exitstatus()}.")
+    exit(1)
+  end
+  argv = ARGV - cc
+  cmdline = AdditionalOptions.option_array(argv)
+            .inject(cmdline) {|result, opt| result << " #{opt}" }
+  return cmdline
+end
+
+
+if ARGV.size >= 3 then
+  client_name = ARGV[0]
+  message     = ARGV[1]
+  dest_url    = ARGV[2]
+
+  cmdline = create_command_line(client_name, message, dest_url)
+
+  system(cmdline)
+  if $?.exitstatus() == EXIT_BY_NO then
+    $stderr.puts("#{client_name} exited by user input 'no'.")
+    exit(EXIT_BY_NO)
+  elsif $?.exitstatus() > 0 then
+    $stderr.puts("Error: #{client_name} terminated with status #{$?}")
+    exit(1)
+  end
+else
+  $stderr.puts("Usage: rpfmt client text URL|status [option]...")
+  exit(1)
+end
+
+exit(0)

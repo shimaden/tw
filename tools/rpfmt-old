@@ -1,0 +1,43 @@
+#!/usr/bin/ruby
+# encoding: UTF-8
+#
+class Client
+  def self.client(cmd)
+    if cmd == "us" || cmd == "tm" then
+      return cmd
+    else
+      return "us"
+    end
+  end
+end
+
+class Main
+  attr_reader :status, :screen_name
+
+  def initialize(twitter_url)
+    # https://twitter.com/YahooNewsTopics/status/427601923017949185
+    arr = twitter_url.split("/")
+    @status = arr[arr.size - 1]
+    @screen_name = arr[arr.size - 3]
+  end
+
+  def status
+    @status
+  end
+
+  def screen_name
+    @screen_name
+  end
+
+end
+
+if 1 <= ARGV.size && ARGV.size <= 3 then
+  main = Main.new(ARGV[2])
+  client = Client.client(ARGV[0])
+  cmdline = "#{client} \"@#{main.screen_name} #{ARGV[1]}\" --in-reply-to #{main.status}"
+  puts cmdline
+  exit system(cmdline)
+else
+  STDERR.puts "Error: argument must be one or two."
+  exit 1
+end
