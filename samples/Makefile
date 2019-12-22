@@ -1,6 +1,6 @@
 include ../common.mk
 
-SAMPLES = README.md sample.rb stream.rb update_profile_image.rb
+SAMPLES = README.md sample.rb update_profile_image.rb
 
 install: $(SAMPLES)
 	mkdir -m 2750 -p $(SAMPLESDIR)
