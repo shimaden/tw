@@ -1,0 +1,157 @@
+%capitalized-prg - Twitter client on Ruby version %version
+
+使い方: %prg [MESSAGE] [OPTION]...
+例:
+  %prg "hello, twitter"        # メッセージをツイート
+  %prg --timeline-home -c 50   # ホーム・タイムラインから最新の 50 件を取得
+  %prg --stream --format=color # ユーザ・ストリームを色つきで表示
+  %prg --filter-stream --filter-stream-follow # ユーザ・ストリームを色つきで表示
+
+ 主な操作:
+
+  アカウント関係:
+  -a     --as, --account=ACCOUNT    ACCOUNT でツイッターにログイン(@ は不要)
+  --account-add                     既存の新しいユーザを追加
+  --account-list                    追加されているユーザの一覧を見る
+  --account-set-default=ACCOUNT     デフォルトのアカウントを ACCOUNT にする
+                                    (@ は不要)
+
+  ツイートする:
+  -t, --tweet=MESSAGE               ツイートするテキスト
+  -i, --id,  --status=STATUS        ツイートを表示
+  -s, --rt,  --retweet=STATUS[,STATUS].. リツイートする
+  --unrt,  --unretweet=STATUS[,STATUS].. リツイートを取り消す
+  -f, --fav, --favorite=STATUS      お気に入りに追加
+  --ufav, --unfavorite=STATUS       お気に入りから外す
+  --delete=STATUS                   ツイートを消去
+
+  タイムライン表示:
+  --th, --timeline-home             ホーム・タイムライン (default 20 tweets)
+  --tm, --timeline-mentions         自分宛 @メンション・タイムライン (default 20 tweets)
+  --tu, --timeline-user=USER        指定されたユーザの投稿タイムライン (default 20 tweets)
+  --tl, --timeline-list=USER/LIST   ユーザ USER のリスト LIST のタイムライン
+  --tr, --timeline-retweets-of-me   RTされた自分のTWのタイムライン
+  --tf, --timeline-favorites=USER   自分がお気に入りにしたTW
+  --ts, --timeline-search=QUERY     検索（Twitterにより過去7日までの制限あり）
+
+  リスト:
+  -l, --lists-ownerships=USER,      USER が作成したリストの一覧
+      --lists-owning=USER
+  -L, --lists-memberships=USER,     USER がメンバーになっているリストの一覧 
+      --lists-added=USER
+  --lists-members=LIST              LIST のメンバーになっているユーザーの一覧
+                                    デフォルトは 20 ユーザー。
+                                    LIST:
+                                      list-id, @screen_name/slug,
+                                      user-id/slug, /screen_name/lists/slug
+  --lists-add-member=LIST_DEF       LIST_DEF:
+                                      list-id:user
+                                      list-owner:slug:user
+
+  ユーザ・ストリーム:
+  --st,  --stream                   ユーザ・ストリームを受信する
+  --filter-stream                   フィルタ・ストリームを受信する
+    --filter-stream-follow USERID[,USERID]...
+
+  ユーザ情報:
+  -u,    --user=USER                USER の情報を表示する
+    --from-cache                    付加するとAPIからではなくキャッシュから
+                                    フォローされているかの情報を取得する
+                                    （API規制の消費を減らせるが情報に
+                                    タイムラグが生じる）。
+
+  他のソフトウェアとの連携用:
+  --rf,  --reply-format=STATUS      STATUS へ返信するための文字列を表示
+  --mf,  --mention-format=STATUS    STATUS へのメンション用の文字列を表示
+
+  Direct message:
+  -d, --dm,   --direct-messages         ダイレクト・メッセージを表示する
+  -D, --dmto, --direct-message-to=USER  USER にダイレクト・メッセージを送る
+
+  ユーザの一覧:
+  --followings-users[=USER]         USER がフォローしているユーザの一覧
+    --friends-users[=USER]
+  --followers-users[=USER]          USER をフォローしているユーザの一覧
+  --followings-ids[=USER]           USER がフォローしているユーザIDの一覧
+    --friends-ids[=USER]
+  --followers-ids[=USER]            USER をフォローしているユーザIDの一覧
+  --blocks-users                    自分がブロックしているユーザの一覧
+  --mutes-users                     自分がミュートしているユーザの一覧
+  --blocks-ids                      自分がブロックしているユーザIDの一覧
+  --mutes-ids                       自分がミュートしているユーザIDの一覧
+
+  USER の書式:
+    @screen_name                    @ で始まればスクリーン・ネームと仮定する
+    number                          数字のみならユーザ ID と仮定する
+
+  API:
+  --api=API                         API の現在のレートを表示. 詳しくは:
+                                    https://dev.twitter.com/docs/api/1.1
+
+  入力の切り替え:
+  --pipe                            ツイートのメッセージを標準入力から入力する
+                                    "/EX" のみの行があれば、そこまでを 1 つの
+                                    ツイートとして送信する。
+                                    "/EX" で区切ればいくつものツイートを連続
+                                    送信できる。
+
+ 操作に変更を加えるオプション:
+
+  -c,      --count=N                Get and show N tweets.
+  --no-retweets, --nort             Don't display retweets.
+  --max,   --max-id=STATUS          Get and show tweets posted at and before
+                                    STATUS when --timeline-xx.
+                                    (STATUS is included.)
+  --since, --since-id=STATUS        Get and show tweets posted after STATUS
+                                    when --timeline-xx.
+                                    (STATUS is not included.)
+  --rd,  --reply-depth=N            Get and show in-reply-to up to N replies.
+                                    recursively. (default 0)
+  -R, --in-reply-to=STATUS          in-reply-to status ID to reply in old
+                                    style.
+  -r, --in-reply-to-new=STATUS      in-reply-to status ID when tweet in new
+                                    auto populate style.
+  -x, --exclude-reply-user-ids=USER[,USER...] Exclude USERs from reply target.
+  --disaboe-auto-populated-reply=yes|no, --old-style-reply
+                                    Twitter counts @mentions as parts of 140-
+                                    character message text.
+  --media, --attach=FILE            Attach FILE to the tweet.
+  -o, --aditional-owners            CSV of additional owners of media or video
+  -q, --quote-tweet                 URL of a quote tweet or DM deep link.
+  --save-as-text=FILE               Save tweets / user info to FILE in text
+                                    format. Can be used with --save-as-json.
+  --save-as-json=FILE               Save tweets / user info to FILE in JSON
+                                    format. Can be used with --save-as-text.
+  --store[=DIR],                    Save tweets to a file.
+  -m, --message=MESSAGE             Add message when '--reply-format'.
+  --cc                              Place screen names which are indirect
+                                    destination when --reply-format.
+  --command-line-only               Output command line form when
+                                    --reply-format or --mention-format is
+                                    specified.
+  -y, --yes, --assume-yes           Assume to answer 'yes' to questions.
+  --force                           Force to contine if errors occur.
+  --dont-get-tweet                  Don't get reply target tweet.
+
+ Format selection:
+  -F,    --format=FORMAT            Output format.
+
+ FORMAT: (text|color|json)|array
+
+  Tweets
+    text                            plain text
+    color                           colorized text
+    json                            JSON
+    array                           Output new line for each argument when
+                                    --command-line-only specified.
+  Users
+    text                            plain text
+    color                           colorized text (dummy)
+    json                            JSON
+    simple                          Simple format
+    full                            Full format
+
+ Other options:
+
+  -h, --help                        Show help.
+  -v, --version                     Show version.

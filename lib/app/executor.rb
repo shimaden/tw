@@ -1,216 +1,262 @@
+# encoding: UTF-8
+require 'getoptlong.rb'
+require File.expand_path('abstract_executor', File.dirname(__FILE__))
+require File.expand_path('geo', File.dirname(__FILE__))
+require File.expand_path('file_saver', File.dirname(__FILE__))
+require File.expand_path('executor_exit_code', File.dirname(__FILE__))
+require File.expand_path('executor/functions', File.dirname(__FILE__))
+require File.expand_path('reply_formatter', File.dirname(__FILE__))
+require File.expand_path('mention_formatter', File.dirname(__FILE__))
+
 module Tw::App
-  class Main
+  #**************************************************************************
+  #    Executor class.
+  #**************************************************************************
+  class Executor < AbstractExecutor
+    private_class_method :new
 
-    private
-    def regist_cmds
-      cmd :user do |v, opts|
-        if v == true
-          STDERR.puts 'e.g.  tw "hello" --user=USERNAME'
-          on_error
-        else
-          Render.puts "switch user -> @#{v}"
+    #----------------------------------------------------------------
+    # Initializer
+    #----------------------------------------------------------------
+    def initialize(logger)
+      super()
+      @options = Options.new()
+    end
+
+  #**************************************************************************
+  #
+  #                         Function Invoking
+  #
+  #**************************************************************************
+
+    #----------------------------------------------------------------
+    # Main method
+    #----------------------------------------------------------------
+    def run()
+      ret = RetCode.new()
+      begin
+        # Push command line options into the @options Array.
+        @parser.each do |optname, optarg|
+          @options.append_option(optname, optarg)
         end
-      end
 
-      cmd 'user:add' do |v, opts|
-        Tw::Auth.regist_user
-        on_exit
-      end
-
-      cmd 'user:list' do |v, opts|
-        Tw::Conf['users'].keys.each do |name|
-          puts name == Tw::Conf['default_user'] ? "* #{name}" : "  #{name}"
+        # Login as a specified account.
+        if @options.has_key?('--account') then
+          self.account = @options['--account'].last
         end
-        puts "(#{Tw::Conf['users'].size} users)"
-        on_exit
-      end
 
-      cmd 'user:default' do |v, opts|
-        if v.class == String
-          Tw::Conf['default_user'] = v
-          Tw::Conf.save
-          puts "set default user \"@#{Tw::Conf['default_user']}\""
-        else
-          puts "@"+Tw::Conf['default_user'] if Tw::Conf['default_user']
-          STDERR.puts "e.g.  tw --user:default=USERNAME"
-        end
-        on_exit
-      end
-
-      cmd :timeline do |v, opts|
-        unless v.class == String
-          auth
-          Render.display client.home_timeline, opts[:format]
-          on_exit
-        end
-      end
-
-      cmd :dm do |v, opts|
-        auth
-        Render.display client.direct_messages, opts[:format]
-        on_exit
-      end
-
-      cmd 'dm:to' do |to, opts|
-        unless opts[:pipe]
-          message = opts.argv.join(' ')
-          len = message.char_length_with_t_co
-          if len > 140
-            STDERR.puts "message too long (#{len} chars)"
-            on_error
-          elsif len < 1
-            STDERR.puts 'e.g.  tw --dm:to=USERNAME  "hello"'
-            on_error
+        # The first argument is used for a tweet or a direct message.
+        # More than one argument is given, exit with an error status code.
+        #
+        # コマンドラインの引数とオプションの数とで処理を分岐
+        if ARGV.size == 1 then  # 引数が1個
+          if @options.has_key?('--direct-message-to') then
+            to_user = @options['--direct_message_to']
+            message = ENV.key?("OCRA_EXECUTABLE") ? ARGV[0].encode(Encoding::UTF_8) : ARGV[0]
+            self.direct_message_to('--direct-message-to', @options['--direct-message-to'][0])
           else
-            puts "DM to @#{to}"
-            puts "\"#{message}\"?  (#{len} chars)"
-            unless opts.has_option? :yes
-              puts '[Y/n]'
-              on_exit if STDIN.gets.strip =~ /^n/i
+            if @options.has_key?('--tweet') then
+              raise CmdOptionError.new("--tweet option can't be specified when the tweet message is given as an argument.")
             end
-            auth
-            client.direct_message_create to, message
+            message = ENV.key?("OCRA_EXECUTABLE") ? ARGV[0].encode(Encoding::UTF_8) : ARGV[0]
+            ret = self.tweet(nil, message)
           end
-          on_exit
-        end
-      end
-
-      cmd :favorite do |v, opts|
-        if opts.has_param? :favorite
-          id = opts[:favorite]
-          auth
-          client.show_status id
-          puts 'Fav this?'
-          unless opts.has_option? :yes
-            puts '[Y/n]'
-            on_exit if STDIN.gets.strip =~ /^n/i
+          return ret
+        elsif ARGV.size == 0 then # 引数なし
+          if @options.empty? then
+            ret.code = TOO_FEW_ARGS_ERR
+            return ret
           end
-          puts "success!" if client.favorite id
+        elsif ARGV.size >= 2 then # 引数大杉
+          ret.code = TOO_MANY_ARGS_ERR
+          return ret
         end
-        on_exit
-      end
 
-      cmd :retweet do |v, opts|
-        if opts.has_param? :retweet
-          id = opts[:retweet]
-          auth
-          client.show_status id
-          puts 'RT this?'
-          unless opts.has_option? :yes
-            puts '[Y/n]'
-            on_exit if STDIN.gets.strip =~ /^n/i
-          end
-          puts "success!" if client.retweet id
-        end
-        on_exit
-      end
-
-      cmd :delete do |v, opts|
-        if opts.has_param? :delete
-          id = opts[:delete]
-          auth
-          client.show_status id
-          puts 'Delete this?'
-          unless opts.has_option? :yes
-            puts '[Y/n]'
-            on_exit if STDIN.gets.strip =~ /^n/i
-          end
-          puts "success!" if client.destroy_status id
-        end
-        on_exit
-      end
-
-      cmd :pipe do |v, opts|
-        auth
-        lines = STDIN.readlines.join
-        lines.split(/(.{140})/u).select{|m|m.size>0}.each do |message|
-          begin
-            if opts.has_param? 'dm:to'
-              puts to = opts['dm:to']
-              client.direct_message_create to, message
-            else
-              tweet_opts = {}
-              tweet_opts[:in_reply_to_status_id] = opts[:status_id] if opts.has_param? :status_id
-              client.tweet message, tweet_opts
+        # Perform the functions designated by options one by one.
+        # 与えられたコマンドライン引数とオプションに従い、1つ1つ実際に仕事をする。
+        @options.each do |optname, optargs|
+          if optname.is_a?(StringWithFunction) then
+            result = []
+            optargs.each do |arg|
+              result << optname.func.call(optname, arg)
             end
-          rescue => e
-            STDERR.puts e.message
-          end
-        end
-        on_exit
-      end
-
-      cmd :search do |v, opts|
-        if v.class == String
-          auth
-          Render.display client.search(v), opts[:format]
-          on_exit
-        else
-          STDERR.puts "e.g.  tw --search=ruby"
-          on_error
-        end
-      end
-
-      cmd :stream do |v, opts|
-        stream = Tw::Client::Stream.new opts.has_param?(:user) ? opts[:user] : nil
-        Render.puts "-- waiting stream.."
-        loop do
-          begin
-            stream.user_stream do |s|
-              Render.display s, opts[:format]
-            end
-          rescue Timeout::Error, SocketError => e
-            sleep 5
-            next
-          rescue => e
-            STDERR.puts e
-            on_error
-          end
-        end
-        on_exit
-      end
-
-      cmd 'stream:filter' do |v, opts|
-        unless v.class == String
-          STDERR.puts "e.g.  tw --stream:filter=ruby,java"
-          on_error
-        else
-          track_words = v.split(/\s*,\s*/)
-          stream = Tw::Client::Stream.new opts.has_param?(:user) ? opts[:user] : nil
-          Render.puts "-- waiting stream..  track \"#{track_words.join(',')}\""
-          loop do
-            begin
-              stream.filter track_words do |s|
-                Render.display s, opts[:format]
+            if result.size == 1 then
+              if result[0].is_a?(RetCode)
+                ret = result[0]
+              else
+                ret.code = result[0]
               end
-            rescue Timeout::Error, SocketError => e
-              sleep 5
-              next
-            rescue => e
-              STDERR.puts e
-              on_error
+            elsif result.size >= 2 then
+              if result.find{|v1, v2| v1 != 0} then
+                ret.code = MULTI_CALL_ERR
+                ret.add_sub_code(result)
+              end
             end
           end
-          on_exit
+        end
+
+      rescue GetoptLong::Error => e
+        ret.code = 1
+      rescue Tw::Error::Unauthorized,
+             Tw::Error::RequestTimeout,
+             Tw::Error::Forbidden,
+             Tw::Error::NotFound,
+             Tw::Error::InternalServerError,
+             Tw::Error::ServiceUnavailable,
+             Tw::Error::TooManyRequests,
+             Tw::Error::BadRequest,
+             Tw::App::Renderer::RenderingFormatError
+        raise
+      rescue ::TypeError
+        raise
+      rescue Net::OpenTimeout
+        raise
+      #rescue Errno::EPIPE, Errno::ENOENT
+      rescue SystemCallError
+        raise
+      rescue CmdOptionError
+        raise
+      rescue Tw::Error  => e
+        $stderr.puts(experr(__FILE__, __LINE__, e))
+        ret.code = 1
+      rescue => e
+        $stderr.puts(experr(__FILE__, __LINE__, e))
+        $stderr.puts(Tw::BACKTRACE_MSG)
+        $stderr.puts(e.backtrace.join("\n")) if ENV["TWBT"]
+        ret.code = 1
+      end
+      return ret
+    end
+
+      #--------------------------------------------------------------
+    protected
+      #--------------------------------------------------------------
+
+  #**************************************************************************
+  #
+  #                     Accunt Manipulation Handlers
+  #
+  #**************************************************************************
+
+    #----------------------------------------------------------------
+    # Select account to login Twitter.
+    #----------------------------------------------------------------
+    def account=(val)
+      @account = val
+      #self.renderer.puts("Log in as @#{@account}")
+      $stderr.puts("Log in as @#{@account}")
+      return 0
+    end
+
+    #----------------------------------------------------------------
+    # Add a new account.
+    #----------------------------------------------------------------
+    def account_add(optname, optarg)
+      new_auth = self.client.new_auth(optarg)
+      return 0
+    end
+
+    #----------------------------------------------------------------
+    # List account.
+    #----------------------------------------------------------------
+    def account_list(optname, optarg)
+      Tw::Conf['users'].keys.each do |name|
+        self.renderer.puts(
+              (name == Tw::Conf['default_user']) ? "* #{name}" : "  #{name}")
+      end
+      self.renderer.puts("(#{Tw::Conf['users'].size} users)")
+      return 0
+    end
+
+    #----------------------------------------------------------------
+    # Set the default account.
+    #----------------------------------------------------------------
+    def account_set_default(optname, optarg)
+      Tw::Conf['default_user'] = optarg
+      Tw::Conf.save()
+      self.renderer.puts("set default user \"@#{Tw::Conf['default_user']}\"")
+      return 0
+    end
+
+  #**************************************************************************
+  #
+  #                      Help and Version Handlers
+  #
+  #**************************************************************************
+
+    #----------------------------------------------------------------
+    # Show help.
+    #----------------------------------------------------------------
+    def help(optname, optarg)
+      help_file_name = File.expand_path('help.txt', File.dirname(__FILE__))
+      prg = Tw::Conf::SOFTWARE_NAME
+      File.open(help_file_name, "r") do |f|
+        while line = f.gets do
+          self.renderer.puts(
+                line.gsub(/%prg/, prg) \
+                    .gsub(/%capitalized-prg/, prg.capitalize) \
+                    .gsub(/%version/, Tw::VERSION))
         end
       end
-
-      cmd :version do |v, opts|
-        puts "tw version #{Tw::VERSION}"
-        on_exit
-      end
+      return 1
     end
 
-    def cmd(name, &block)
-      if block_given?
-        cmds[name.to_sym] = block
-      else
-        return cmds[name.to_sym]
-      end
+    #----------------------------------------------------------------
+    # Show version.
+    #----------------------------------------------------------------
+    def version(optname, optarg)
+      ret = nil
+      puts "optname: '#{optname}'"
+      puts "optarg : '#{optarg}'"
+      ret = 0
+      return ret
     end
 
-    def cmds
-      @cmds ||= Hash.new
+  #**************************************************************************
+  #
+  #                      Miscellaneous Methods
+  #
+  #**************************************************************************
+
+    #----------------------------------------------------------------
+    # line
+    #----------------------------------------------------------------
+    def line_str(n)
+      line = ""
+      n.times do line += "-" end
+      return line
+    end
+
+  #**************************************************************************
+  #
+  #                        Default Value Getters
+  #
+  #**************************************************************************
+
+    #----------------------------------------------------------------
+    # Tw::CacheableFollowersIds.new の followers_cache_option を返す。
+    #----------------------------------------------------------------
+    def followers_cache_option()
+      return {
+        :filename   => Tw::Conf.follower_ids_filename(
+                            self.client.new_auth.user_id),
+        :permission => FOLLOWERS_CACHE_PERMISSON,
+        :interval   => FOLLOWERS_CACHE_INTERVAL
+      }
+    end
+
+    public
+
+    #----------------------------------------------------------------
+    # Tw::Configuration.new の help_conf_opts を返す。
+    #----------------------------------------------------------------
+    def help_configuration_options()
+      return {
+        :filename    => Tw::Conf.help_configure_filename(
+                          self.client.new_auth.user_id),
+        :permission => HELP_CONFIGURATION_CACHE_MODE,
+        :interval   => HELP_CONFIGURATION_CACHE_INTERVAL
+      }
     end
 
   end

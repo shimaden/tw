@@ -1,0 +1,116 @@
+%capitalized-prg - Twitter client on Ruby version %version
+
+Usage: %prg [MESSAGE] [OPTION]...
+Examples:
+  %prg "hello, twitter"        # Tweet a message
+  %prg --timeline-home -c 50   # Read recent 50 tweets from home timeline.
+  %prg --stream --format=color # Display user stream in color format.
+
+ Main operation:
+
+  Account:
+  -a     --as, --account=ACCOUNT    Login to Twitter as ACCOUNT. (without @)
+  --account-add                     Add a new user.
+  --account-list                    Show the list of added user.
+  --account-set-default=ACCOUNT     Set a default account. (without @)
+
+  Tweet:
+  -i, --id,  --status=STATUS        Show a tweet.
+  -s, --rt,  --retweet=STATUS[,STATUS].. Retweet.
+  -f, --fav, --favorite=STATUS      Favorite.
+  --ufav, --unfavorite=STATUS       Unfavorite.
+  --delete=STATUS                   Delete a tweet.
+
+  Timeline:
+  --th, --timeline-home             Show home timeline. (default 20 tweets)
+  --tm, --timeline-mentions         Show mentions timeline. (default 20 tweets)
+  --tu, --timeline-user=USER        Show USER's timeline. (default 20 tweets)
+                                    (@ needed)
+  --tl, --timeline-list=USER/LIST   Show the timeline of a specified list.
+  --tr, --timeline-retweets-of-me   Show retweets-of-me timeline.
+  --tf, --timeline-favorites=USER   Show favorite list.
+
+  List:
+  -l,    --lists=USER               Show lists USER owns.
+  -L,    --lists-added=USER         Show lists USER is added.
+
+  User stream:
+  --st,  --stream                   Receive user stream. (home timeline)
+
+  User information:
+  -u,    --user=USER                Show user information.
+
+  Cooperation with other software:
+  --rf,  --reply-format=STATUS      Show a string for a reply to STATUS.
+  --mf,  --mention-format=STATUS    Show a string for a mention to STATUS.
+
+  Direct message:
+  -d, --dm,   --direct-messages         Show direct messages.
+  -D, --dmto, --direct-message-to=USER  Send a direct message to USER.
+
+  User list:
+  --followings-users                Following users.
+  --followers-users                 Followers.
+  --blocks-users                    Blocked users.
+  --mutes-users                     Muted users.
+
+  USER format:
+
+    @screen_name                    If the top character is '@', the value is
+                                    assumed to be a screen name.
+    number                          If all characters are digits, the value is
+                                    assumed to be a user id.
+
+  API:
+  --api=API                         Show current rate limits of API.
+                                    about API names see:
+                                    https://dev.twitter.com/docs/api/1.1
+
+ Input selection:
+  --pipe                            Tweet message from standard input.
+                                    A line written "/EX" separate input into
+                                    two tweets. "/EX" can be used multiple
+                                    times. 
+
+ Operation modifiers:
+
+  -c,      --count=N                Get and show N tweets.
+  --max,   --max-id=STATUS          Get and show tweets posted at and before
+                                    STATUS when --timeline-xx.
+                                    (STATUS is included.)
+  --since, --since-id=STATUS        Get and show tweets posted after STATUS
+                                    when --timeline-xx.
+                                    (STATUS is not included.)
+  --rd,  --reply-depth=N            Get and show in-reply-to up to N replies.
+                                    recursively. (default 0)
+  -t, --rp,  --in-reply-to=STATUS   Append in-reply-to status ID when tweet.
+  --media, --attach=FILE            Attach FILE to the tweet.
+  --save-as-text=FILE               Save tweets / user info to FILE in text
+                                    format. Can be used with --save-as-json.
+  --save-as-json=FILE               Save tweets / user info to FILE in JSON
+                                    format. Can be used with --save-as-text.
+  --store[=DIR],                    Save tweets to a file.
+  -m, --message=MESSAGE             Add message when '--reply-format'.
+  --cc                              Place screen names which are indirect
+                                    destination when --reply-format.
+  --command-line-only               Output command line form when
+                                    --reply-format or --mention-format is
+                                    specified.
+  -y, --assume-yes                  Assume to answer 'yes' to questions.
+  --force                           Force to contine if errors occur.
+
+ Format selection:
+  -F,    --format=FORMAT            Output format.
+
+ FORMAT: (text|color|json)|array
+
+    text                            plain text
+    color                           colorized text
+    json                            JSON
+    array                           Output new line for each argument when
+                                    --command-line-only specified.
+
+ Other options:
+
+  -h, --help                        Show help.
+  -v, --version                     Show version.
