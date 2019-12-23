@@ -5,7 +5,7 @@ Commind line Twitter client - a fork of tw written by Shokai
 ```
 Usakotter allows you to:
 - post a tweet.
-- display timelines: Home, Mention, User, List, Retweets-of-me, Favorites (Like), Search.
+- display timelines: Home, Mention, User, List, Retweets-of-me, Favorites (Likes), Search.
 - show a specified user's information.
 - show the Lists which a specified user own.
 - show the Lists which a specified user belongs to.
