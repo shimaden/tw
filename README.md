@@ -1,5 +1,5 @@
 # Usakotter
-Commind line Twitter client - a fork of tw written by Shokai
+Commind line Twitter client - a fork of tw written by shokai
 
 # Features
 ```
