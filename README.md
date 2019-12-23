@@ -87,6 +87,14 @@ Tweet:
 
     To send a new line, use a '\n'.
 
+__Tweet a message starting with a '-'__
+
+    $ us -t '-3 + 2 = -1'
+
+Tweet:
+
+    -3 + 2 = -1
+
 __Tweet a message from the standard input__
 
     $ cat message.txt | us --pipe
