@@ -135,7 +135,7 @@ Retweets of Me Timeline is a collection of your tweets which are retweeted by so
 
 __--timeline-favorites__, __--tf__ <u>USER</u>
 
-This option displays a series of tweets which someone liked (favorited).
+This option displays a series of tweets which <u>USER</u> liked (favorited).
 
 <u>USER</u> is a Screen Name or a User ID.
 
@@ -171,9 +171,9 @@ The format of <u>QUERY</u> is the same as the one for Twitter Webclient or Offic
 
 ### List Timeline
 
-__--timeline--list__, __--tl__ @<u>SCREEN_NAME</u>/<u>LIST</u>
+__--timeline--list__, __--tl__ @<u>SCREEN-NAME</u>/<u>LIST</u>
 
-This option displays tweets in a spefified List owned by a spefified user.
+This option displays tweets in the list specified by <u>LIST</u> owned by the user specified by <u>SCREEN-NAME</u>.
 
 The following example displays tweets in the List "leadership-at-nasa" owned by @NASA.
 
