@@ -48,11 +48,6 @@
                                       list-id:user
                                       list-owner:slug:user
 
-  ユーザ・ストリーム:
-  --st,  --stream                   ユーザ・ストリームを受信する
-  --filter-stream                   フィルタ・ストリームを受信する
-    --filter-stream-follow USERID[,USERID]...
-
   ユーザ情報:
   -u,    --user=USER                USER の情報を表示する
     --from-cache                    付加するとAPIからではなくキャッシュから
