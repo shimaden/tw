@@ -79,6 +79,40 @@ Tweet:
 
     -3 + 2 = -1
 
+__Reply__
+
+__New style reply__
+
+__--in-reply-to-new__, __-r__ STATUS-ID
+
+With this option, Usakotter posts a reply to the tweet specified by STATUS-ID.
+
+Status ID is a unique number to identify a tweet. There are no tweets which have the same Status ID.
+Status ID is found at the tail part of the URL of each tweet.
+
+    https://twitter.com/<SCREEN-NAME>/status/<STATUS-ID>
+
+For example, to reply to the tweet whose URL is as follows:
+
+    https://twitter.com/<SCREEN-NAME>/status/1234123412341234134
+
+execute __us__ like this:
+
+    $ us "Yes, I think so too." -r 1234123412341234134
+
+Note that with this opotion, the reply is addressed to all users involved in the destination tweet, not only to the destination tweet owner.
+
+__Old style reply__
+
+__--in-reply-to__, __-R__ STATUS-ID
+
+This option is used to reply to the tweet with STATUS-ID. The message text must contain a @&lt;SCREEN-NAME> of the destination tweet owner somewhere in the message text.
+
+In the following examples, Usakotter replies to the tweet with Status ID 1234123412341234134 which is tweeted by @&lt;SCREEN-NAME>.
+
+    $ us "@<SCREEN-NAME> I think so too." -R 1234123412341234134
+    $ us "Mt. Fuji is beautiful. RT @<SCREEN-NAME>: I think so too." -R 1234123412341234134
+
 __Tweet a message from the standard input__
 
 __--pipe__
@@ -218,6 +252,22 @@ This option displays tweets in the list specified by <u>LIST</u> owned by the us
 The following example displays tweets in the List "leadership-at-nasa" owned by @NASA.
 
     $ us --timeline-list @NASA/leadership-at-nasa
+
+## Display individual tweets
+
+__--status__, __--id__, __-i__ STATUS-ID[,STATUS=ID[,[STATUS=ID]]]
+
+__us__ -i STATUS=ID[,STATUS=ID[,[STATUS=ID]]]
+
+Display a tweet with Status ID 1234123412341234134:
+
+    $ us -i 1234123412341234001
+
+Display two or more individual tweets. In the following example, Usakotter display three tweets:
+
+    $ us -i 1234123412341234001,1234123412341234002,1234123412341234003
+
+About Suatus ID, see __--in-reply-to-new__ option:
 
 # Author
 Shimaden (@SHIMADEN, 94380019, on Twitter, https://github.com/shimaden )
