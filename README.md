@@ -13,10 +13,10 @@ Usakotter allows you to:
 - show the Lists which a specified user belongs to.
 - show the member users in a specified List.
 - add a specified user to a specified List which you created.
-- show the users which a specified user follow.
-- show the users which a specified user is followed by.
-- show the users which you mute.
-- show the users which you block.
+- show the users who a specified user follow.
+- show the users who a specified user is followed by.
+- show the users who you mute.
+- show the users who you block.
 - show the current rate of Twitter APIs.
 - output each data in both a human readable text format and JSON.
 ```
@@ -68,6 +68,14 @@ __--video__ FILE
 __Usakotter__ can post a tweet with up to one video file.
 
     $ us "My puppy." --video puppy.mp4
+
+__Post a tweet with a quoted tweet__
+
+__--quote-tweet__ TWEET-URL
+
+Post a tweet which quotes the tweet whose URL is TWEET-URL.
+
+    $ us "Awsome piano performance\!" -q https://twitter.com/USAFBandPacific/status/1188709081197895680
 
 __Tweet a message starting with a '-'__
 
@@ -186,13 +194,13 @@ __--timeline-home__, __--th__
 
     $ us --timeline-home
 
-### Mention Timeline
+#### Mention Timeline
 
 __--timeline-mention__, __--tm__
 
     $ us --timeline-mention
 
-### Retweets of Me Timelin
+#### Retweets of Me Timelin
 
 __--timeline-retweets-of-me__, __--tr__
 
@@ -202,7 +210,7 @@ Retweets of Me Timeline is a collection of your tweets which are retweeted by so
     or
     $ us --tr
 
-### Favorites Timeline
+#### Favorites Timeline
 
 __--timeline-favorites__, __--tf__ USER
 
@@ -215,7 +223,7 @@ Both of the following two command display tweets liked by @NASA.
     $ us --timeline-favorites @NASA
     $ us --tf 11348282
 
-### User Timeline
+#### User Timeline
 
 __--timeline-user__, __--tu__ USER
 
@@ -229,7 +237,7 @@ The following four command lines do the same thing. They display the User Timeli
     $ us --tu @NASA
     $ us --tu 11348282
 
-### Search Timeline
+#### Search Timeline
 
 __--timeline-search__, __--ts__ QUERY
 
@@ -243,7 +251,7 @@ The following two lines display tweets including the words both "Japan" and "Oly
 
 The format of QUERY is the same as the one for Twitter Webclient or Official Twitter apps for mobile phones.
 
-### List Timeline
+#### List Timeline
 
 __--timeline--list__, __--tl__ @SCREEN-NAME/LIST
 
@@ -253,7 +261,7 @@ The following example displays tweets in the List "leadership-at-nasa" owned by 
 
     $ us --timeline-list @NASA/leadership-at-nasa
 
-## Display individual tweets
+### Display individual tweets
 
 __--status__, __--id__, __-i__ STATUS-ID[,STATUS=ID[,[STATUS=ID]]]
 
@@ -268,6 +276,82 @@ Display two or more individual tweets. In the following example, Usakotter displ
     $ us -i 1234123412341234001,1234123412341234002,1234123412341234003
 
 About Suatus ID, see __--in-reply-to-new__ option:
+
+## User information
+
+### User account information
+
+__--user__, __-u__ USER
+
+The following two example do the same thihg.
+
+    $ us -u @NASA
+    $ us -u 11348282
+
+### List of following users
+
+__--followings-users__, __--friends-users__ [USER]
+
+Display the list of the users who USER follows.
+
+The following two example do the same thihg.
+
+    $ us --followings-users @NASA
+    $ us --followings-users 11348282
+
+If USER is omited, your follows are listed.
+
+    $ us --followings-users
+
+### List of followers
+ __--followers-users__ [USER]
+ 
+Display the list of the users who USER is followed by.
+ 
+The following two example do the same thihg.
+
+    $ us --followers-users @NASA
+    $ us --followers-users 11348282
+ 
+ If USER is omitted, your followers are listed.
+ 
+    $ us --followers-users
+
+### List of following users by User ID
+
+__--followings-ids__, __--friends-ids__ [USER]
+
+Display the User IDs of the users who USER follows.
+
+    $ us --followings-ids @NASA
+    $ us --followings-ids 11348282
+
+If USER is omitted, your following USER's User IDs are listed.
+
+### List of followers by User ID
+
+__--followers-ids__
+
+Display the User IDs of the users who USER is followed by.
+
+    $ us --followers-ids @NASA
+    $ us --followers-ids 11348282
+
+### List of your blocking users
+
+__--blocks-users__
+
+Display the list of the users who you block.
+
+    $ us --blocks-users
+
+### List of your muting users
+
+__--mutes-users__
+
+Display the list of the users who you mute.
+
+    $ us --mutes-users
 
 # Author
 Shimaden (@SHIMADEN, 94380019, on Twitter, https://github.com/shimaden )
