@@ -102,11 +102,82 @@ __Tweet a message from the standard input__
 
 __Tweet without the confirmation prompt__
 
-In each of the following examples, __us__ tweets the message immediately.
+In each of the following examples, <u>Usakotter</u> tweets the message immediately.
 
     $ us "Hello, world" -y
     $ cat message.txt | us --pipe -y
 
+### Display Timelines
+
+#### Home Timeline
+
+__--timeline-home__, __--th__
+
+    $ us --timeline-home
+
+### Mention Timeline
+
+__--timeline-mention__, __--tm__
+
+    $ us --timeline-mention
+
+### Retweets of Me Timelin
+
+__--timeline-retweets-of-me__, __--tr__
+
+Retweets of Me Timeline is a collection of your tweets which are retweeted by someone.
+
+    $ us --timeline-retweets-of-me
+    or
+    $ us --tr
+
+### Favorites Timeline
+
+__--timeline-favorites__, __--tf__ <u>USER</u>
+
+This option displays a series of tweets which someone liked (favorited).
+
+<u>USER</u> is a Screen Name or a User ID.
+
+Both of the following two command display tweets liked by @NASA.
+
+    $ us --timeline-favorites @NASA
+    $ us --tf 11348282
+
+### User Timeline
+
+__--timeline-user__, __--tu__ <u>USER</u>
+
+<u>USER</u> is a Screen Name or a User ID.
+
+The following two command lines mean the same. Both display the User Timeline of @NASA.
+
+    $ us --timeline-user @NASA
+    $ us --timeline-user 11348282
+
+### Search Timeline
+
+__--timeline-search__, __--ts__ <u>QUERY</u>
+
+This option displays tweets which matchs <u>QUERY</u>
+
+The following two lines display tweets including the words both "Japan" and "Olympics". If there are no tweets wich match <u>QUERY</u>, no tweets will be displayed.
+
+    $ us --timeline-search 'Japan Olympics'
+    or
+    $ us --ts 'Japan Olympics'
+
+The format of <u>QUERY</u> is the same as the one for Twitter Webclient or Official Twitter apps for mobile phones.
+
+### List Timeline
+
+__--timeline--list__, __--tl__ @<u>SCREEN_NAME</u>/<u>LIST</u>
+
+This option displays tweets in a spefified List owned by a spefified user.
+
+The following example displays tweets in the List "leadership-at-nasa" owned by @NASA.
+
+    $ us --timeline-list @NASA/leadership-at-nasa
 
 # Author
 Shimaden (@SHIMADEN, 94380019, on Twitter, https://github.com/shimaden )
