@@ -150,10 +150,13 @@ __--timeline-user__, __--tu__ <u>USER</u>
 
 <u>USER</u> is a Screen Name or a User ID.
 
-The following two command lines mean the same. Both display the User Timeline of @NASA.
+The following four command lines do the same thing. They display the User Timeline of @NASA.
 
     $ us --timeline-user @NASA
     $ us --timeline-user 11348282
+    or
+    $ us --tu @NASA
+    $ us --tu 11348282
 
 ### Search Timeline
 
