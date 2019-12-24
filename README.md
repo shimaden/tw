@@ -69,15 +69,6 @@ __--video__ FILE
 
     $ us "My puppy." --video puppy.mp4
 
-__Exclamation mark:__
-
-    $ us 'Good morning!'
-    $ us "Good morning\!"
-
-Tweet:
-
-    Good moring!
-
 __Tweet a message starting with a '-'__
 
 __-t__
@@ -103,6 +94,15 @@ In each of the following examples, <u>Usakotter</u> tweets the message immediate
 
     $ us "Hello, world" -y
     $ cat message.txt | us --pipe -y
+
+__Exclamation mark:__
+
+    $ us 'Good morning!'
+    $ us "Good morning\!"
+
+Tweet:
+
+    Good moring!
 
 __Double quotation:__
 
