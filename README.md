@@ -5,6 +5,8 @@ Commind line Twitter client - a fork of tw written by shokai
 ```
 Usakotter allows you to:
 - post a tweet.
+- post a tweet with up to four image files.
+- post a tweet with a video file.
 - display timelines: Home, Mention, User, List, Retweets-of-me, Favorites (Likes), Search.
 - show a specified user's information.
 - show the Lists which a specified user own.
@@ -25,9 +27,7 @@ Using B-shell and compatibles are assumed in the following examples.
 
 ### Post a Tweet
 
-__Format__:
-
-    $ us <text>
+__us__ TEXT
 
 __Simple example__
 
@@ -38,6 +38,37 @@ Tweet:
 
     This is the house that Jack built.
 
+__Post a tweet with image files__
+
+<u>Usakotter</u> can post a tweet with up to four image files. JPEG and PNG formats are supported.
+
+__--media1__ FILE1
+
+__--media2__ FILE2
+
+__--media3__ FILE3
+
+__--media4__ FILE4
+
+__us__ TEXT __--media1__ FILE1 [__--media2__ FILE2 [__--media3__ FILE3 [__--media4__ FILE4]]]
+
+Attach an image file to the tweet:
+
+    $ us "I'm on Mt. Fuji now." --media1 mt-fuji.jpg
+
+Attach two or more image files to the tweet:
+
+    $ us "I'm on Mt. Fuji now." --media1 fuji-1.jpg --media2 fuji-2.jpg
+    $ us "I'm on Mt. Fuji now." --media1 fuji-1.jpg --media2 fuji-2.jpg --media3 selfie.png --media4 friend.png
+
+__Post a tweet with a video file__
+
+__--video__ FILE
+
+<u>Usakotter can post a tweet with up to one video file.
+
+    $ us "My puppy." --video puppy.mp4
+
 __Exclamation mark:__
 
     $ us 'Good morning!'
@@ -46,6 +77,32 @@ __Exclamation mark:__
 Tweet:
 
     Good moring!
+
+__Tweet a message starting with a '-'__
+
+__-t__
+
+    $ us -t '-3 + 2 = -1'
+
+Tweet:
+
+    -3 + 2 = -1
+
+__Tweet a message from the standard input__
+
+__--pipe__
+
+    $ cat message.txt | us --pipe
+    $ echo "Hello, world" | us --pipe
+
+__Tweet without the confirmation prompt__
+
+__--assume-yes__, __--yes__, __-y__
+
+In each of the following examples, <u>Usakotter</u> tweets the message immediately.
+
+    $ us "Hello, world" -y
+    $ cat message.txt | us --pipe -y
 
 __Double quotation:__
 
@@ -86,26 +143,6 @@ _Note: '\\\\' between double quotations is interpreted as '\n' by the shell._
 Tweet:
 
     To send a new line, use a '\n'.
-
-__Tweet a message starting with a '-'__
-
-    $ us -t '-3 + 2 = -1'
-
-Tweet:
-
-    -3 + 2 = -1
-
-__Tweet a message from the standard input__
-
-    $ cat message.txt | us --pipe
-    $ echo "Hello, world" | us --pipe
-
-__Tweet without the confirmation prompt__
-
-In each of the following examples, <u>Usakotter</u> tweets the message immediately.
-
-    $ us "Hello, world" -y
-    $ cat message.txt | us --pipe -y
 
 ### Display Timelines
 
