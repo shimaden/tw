@@ -40,7 +40,7 @@ Tweet:
 
 __Post a tweet with image files__
 
-<u>Usakotter</u> can post a tweet with up to four image files. JPEG and PNG formats are supported.
+__Usakotter__ can post a tweet with up to four image files. JPEG and PNG formats are supported.
 
 __--media1__ FILE1
 
@@ -65,7 +65,7 @@ __Post a tweet with a video file__
 
 __--video__ FILE
 
-<u>Usakotter can post a tweet with up to one video file.
+__Usakotter__ can post a tweet with up to one video file.
 
     $ us "My puppy." --video puppy.mp4
 
@@ -124,7 +124,7 @@ __Tweet without the confirmation prompt__
 
 __--assume-yes__, __--yes__, __-y__
 
-In each of the following examples, <u>Usakotter</u> tweets the message immediately.
+In each of the following examples, __Usakotter__ tweets the message immediately.
 
     $ us "Hello, world" -y
     $ cat message.txt | us --pipe -y
@@ -204,11 +204,11 @@ Retweets of Me Timeline is a collection of your tweets which are retweeted by so
 
 ### Favorites Timeline
 
-__--timeline-favorites__, __--tf__ <u>USER</u>
+__--timeline-favorites__, __--tf__ USER
 
-This option displays a series of tweets which <u>USER</u> liked (favorited).
+This option displays a series of tweets which USER liked (favorited).
 
-<u>USER</u> is a Screen Name or a User ID.
+USER is a Screen Name or a User ID.
 
 Both of the following two command display tweets liked by @NASA.
 
@@ -217,9 +217,9 @@ Both of the following two command display tweets liked by @NASA.
 
 ### User Timeline
 
-__--timeline-user__, __--tu__ <u>USER</u>
+__--timeline-user__, __--tu__ USER
 
-<u>USER</u> is a Screen Name or a User ID.
+USER is a Screen Name or a User ID.
 
 The following four command lines do the same thing. They display the User Timeline of @NASA.
 
@@ -231,23 +231,23 @@ The following four command lines do the same thing. They display the User Timeli
 
 ### Search Timeline
 
-__--timeline-search__, __--ts__ <u>QUERY</u>
+__--timeline-search__, __--ts__ QUERY
 
-This option displays tweets which matchs <u>QUERY</u>
+This option displays tweets which matchs QUERY
 
-The following two lines display tweets including the words both "Japan" and "Olympics". If there are no tweets wich match <u>QUERY</u>, no tweets will be displayed.
+The following two lines display tweets including the words both "Japan" and "Olympics". If there are no tweets wich match QUERY, no tweets will be displayed.
 
     $ us --timeline-search 'Japan Olympics'
     or
     $ us --ts 'Japan Olympics'
 
-The format of <u>QUERY</u> is the same as the one for Twitter Webclient or Official Twitter apps for mobile phones.
+The format of QUERY is the same as the one for Twitter Webclient or Official Twitter apps for mobile phones.
 
 ### List Timeline
 
-__--timeline--list__, __--tl__ @<u>SCREEN-NAME</u>/<u>LIST</u>
+__--timeline--list__, __--tl__ @SCREEN-NAME/LIST
 
-This option displays tweets in the list specified by <u>LIST</u> owned by the user specified by <u>SCREEN-NAME</u>.
+This option displays tweets in the list specified by LIST owned by the user specified by SCREEN-NAME.
 
 The following example displays tweets in the List "leadership-at-nasa" owned by @NASA.
 
