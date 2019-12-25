@@ -279,7 +279,19 @@ Display two or more individual tweets. In the following example, Usakotter displ
 
     $ us -i 1234123412341234001,1234123412341234002,1234123412341234003
 
-About Suatus ID, see __--in-reply-to-new__ option:
+About Suatus ID, see __--in-reply-to-new__ option.
+
+### Display a tweet and replies
+
+__--reply-depth__, __--rd__ NUM
+
+If this option is given, Usakotter displays up to NUM tweets in the reply chain from the specified tweet. If 1 is given to NUM, Usakotter displays the destination tweet to which the specified tweet replies. If 2 is given to NUM, Usakotter displays the specified tweet, the destination tweet of the specified tweet, and the destination tweet of the destination tweet of the specified tweet. Usakotter repeats this operation up to NUM times.
+
+In the followeing example, Usakotter displays the specified tweet, whose Status ID is 1234123412341234001, and up to five tweets in the reply chain from the specified tweet.
+
+    $us -i 1234123412341234001 -c 5
+
+If __--reply-depth__=1, Usakotter displays the destination tweet to which the specified tweet replies. If the destination tweet is a reply, Usakotter 
 
 ### User information
 
