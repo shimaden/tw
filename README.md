@@ -192,11 +192,15 @@ Tweet:
 
 __--timeline-home__, __--th__
 
+Display your Home Timeline.
+
     $ us --timeline-home
 
 #### Mention Timeline
 
 __--timeline-mention__, __--tm__
+
+Mention Timeline is a collection of tweets to you. Mention is also called "reply".
 
     $ us --timeline-mention
 
@@ -277,9 +281,9 @@ Display two or more individual tweets. In the following example, Usakotter displ
 
 About Suatus ID, see __--in-reply-to-new__ option:
 
-## User information
+### User information
 
-### User account information
+#### User account information
 
 __--user__, __-u__ USER
 
@@ -288,7 +292,7 @@ The following two example do the same thihg.
     $ us -u @NASA
     $ us -u 11348282
 
-### List of following users
+#### List of following users
 
 __--followings-users__, __--friends-users__ [USER]
 
@@ -303,7 +307,7 @@ If USER is omited, your follows are listed.
 
     $ us --followings-users
 
-### List of followers
+#### List of followers
  __--followers-users__ [USER]
  
 Display the list of the users who USER is followed by.
@@ -317,7 +321,7 @@ The following two example do the same thihg.
  
     $ us --followers-users
 
-### List of following users by User ID
+#### List of following users by User ID
 
 __--followings-ids__, __--friends-ids__ [USER]
 
@@ -328,7 +332,7 @@ Display the User IDs of the users who USER follows.
 
 If USER is omitted, your following USER's User IDs are listed.
 
-### List of followers by User ID
+#### List of followers by User ID
 
 __--followers-ids__
 
@@ -337,7 +341,7 @@ Display the User IDs of the users who USER is followed by.
     $ us --followers-ids @NASA
     $ us --followers-ids 11348282
 
-### List of your blocking users
+#### List of your blocking users
 
 __--blocks-users__
 
@@ -345,13 +349,51 @@ Display the list of the users who you block.
 
     $ us --blocks-users
 
-### List of your muting users
+#### List of your muting users
 
 __--mutes-users__
 
 Display the list of the users who you mute.
 
     $ us --mutes-users
+
+### Specify how many tweets to display
+
+__--count__, __-c__ NUM
+
+Display up to the 20 latest tweets on your Home Timeline:
+
+    $ us --timeline-home -c 20
+
+Display up to 10 latest followers of @NASA:
+
+    $ us --followers-users @NASA
+
+### Output format
+
+__--format__ FORMAT
+
+```
+FORMAT:
+    text (defalut)
+    json (JSON)
+```
+
+### Save tweet data
+
+__--save-as-text=FILE__
+
+Save tweets to FILE in text format.
+
+    $ us --timeline-home --save-as-text timeline-tweets.txt
+
+__--save-as-json=FILE__
+
+Save tweets to FILE in JSON format.
+
+    $ us --timeline-mention --save-as-json mentions.json
+
+
 
 # Author
 Shimaden (@SHIMADEN, 94380019, on Twitter, https://github.com/shimaden )
