@@ -7,6 +7,7 @@ Usakotter allows you to:
 - post a tweet.
 - post a tweet with up to four image files.
 - post a tweet with a video file.
+- retweet, like (favorite), unretweet, unlike (unfavorite) and delete a tweet(s).
 - display timelines: Home, Mention, User, List, Retweets-of-me, Favorites (Likes), Search.
 - show a specified user's information.
 - show the Lists which a specified user own.
@@ -186,6 +187,57 @@ Tweet:
 
     To send a new line, use a '\n'.
 
+### Retweet
+
+__--retweet__, __--rt__, -s STATUS-ID[,STATUS-ID[,STATUS-ID]...]]
+
+Retweet a tweet(s) with a specified Status ID(s).
+
+In the following example, __Usakotter__ retweets two tweets with Status IDs 1234123412341234134 and 6789678967896789678.
+
+    $ us -s 1234123412341234134,
+            6789678967896789678
+
+About Suatus ID, see --in-reply-to-new option.
+
+### Favorite (Like)
+
+__--favorite__, __-fav__, __-f__ STATUS-ID[,STATUS-ID[,STATUS-ID]...]]
+
+Like a tweet(s) with a specified Status ID(s).
+
+    $ us --fav 1234123412341234134
+
+About Suatus ID, see --in-reply-to-new option.
+
+### Unretweet
+
+__--unretweet__, __--unrt__ STATUS-ID
+
+Candel retweeting.
+
+    $ us --unrt 1234123412341234134
+
+About Suatus ID, see --in-reply-to-new option.
+
+### Unfavorite
+
+__--unfavorite__, __--unfav__ STATUS-ID
+
+Cancel favoriting (liking).
+
+    $ us --unfav 1234123412341234134
+
+About Suatus ID, see --in-reply-to-new option.
+
+### Deleta a tweet
+
+__--delete__ STATUS-ID
+
+    $ us --delete 1234123412341234134
+
+About Suatus ID, see --in-reply-to-new option.
+
 ### Display Timelines
 
 #### Home Timeline
@@ -275,7 +327,7 @@ Display a tweet with Status ID 1234123412341234134:
 
     $ us -i 1234123412341234001
 
-Display two or more individual tweets. In the following example, Usakotter display three tweets:
+Display two or more individual tweets. In the following example, __Usakotter__ display three tweets:
 
     $ us -i 1234123412341234001,1234123412341234002,1234123412341234003
 
@@ -285,13 +337,11 @@ About Suatus ID, see __--in-reply-to-new__ option.
 
 __--reply-depth__, __--rd__ NUM
 
-If this option is given, Usakotter displays up to NUM tweets in the reply chain from the specified tweet. If 1 is given to NUM, Usakotter displays the destination tweet to which the specified tweet replies. If 2 is given to NUM, Usakotter displays the specified tweet, the destination tweet of the specified tweet, and the destination tweet of the destination tweet of the specified tweet. Usakotter repeats this operation up to NUM times.
+If this option is given, __Usakotter__ displays up to NUM tweets in the reply chain from the specified tweet. If 1 is given to NUM, __Usakotter__ displays the destination tweet to which the specified tweet replies. If 2 is given to NUM, __Usakotter__ displays the specified tweet, the destination tweet of the specified tweet, and the destination tweet of the destination tweet of the specified tweet. __Usakotter__ repeats this operation up to NUM times.
 
-In the followeing example, Usakotter displays the specified tweet, whose Status ID is 1234123412341234001, and up to five tweets in the reply chain from the specified tweet.
+In the followeing example, __Usakotter__ displays the specified tweet, whose Status ID is 1234123412341234001, and up to five tweets in the reply chain from the specified tweet.
 
     $us -i 1234123412341234001 -c 5
-
-If __--reply-depth__=1, Usakotter displays the destination tweet to which the specified tweet replies. If the destination tweet is a reply, Usakotter 
 
 ### User information
 
