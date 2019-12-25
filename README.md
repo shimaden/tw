@@ -405,8 +405,27 @@ Save tweets to FILE in JSON format.
 
     $ us --timeline-mention --save-as-json mentions.json
 
+# Requirements
 
+## Degian pagages
 
+```
+libruby2.5:amd64        2.5.5-3+deb10u1
+ruby-json               2.1.0+dfsg-2+b1
+ruby-locale             2.1.2-1
+ruby-multipart-post     2.0.0-1
+ruby-nokogiri           1.10.0+dfsg1-2
+ruby-oauth              0.5.4-1
+ruby-httpclient         2.8.3-2
+ruby-addressable        2.5.2-1
+```
+
+## Gems
+```
+rainbow                 3.0.0
+twitter                 6.2.0
+twitter-text            3.0.0
+```
 # Author
 Shimaden (@SHIMADEN, 94380019, on Twitter, https://github.com/shimaden )
 
