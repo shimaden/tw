@@ -426,6 +426,21 @@ rainbow                 3.0.0
 twitter                 6.2.0
 twitter-text            3.0.0
 ```
+
+## Application Keys
+
+You need to open a Twitter Develop account at https://developer.twitter.com and register your app to get Consumer Key and Consumer Secret.
+
+## Setup
+
+    $ touch ~/.us-key
+    $ chmod 0600 ~/.us-key
+
+vim ~/.us-key:
+
+    Consumer Key: <Your Consumre Key>
+    Consumer Secret: <Your Consumer Secret>
+
 # Author
 Shimaden (@SHIMADEN, 94380019, on Twitter, https://github.com/shimaden )
 
