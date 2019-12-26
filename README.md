@@ -195,8 +195,7 @@ Retweet a tweet(s) with a specified Status ID(s).
 
 In the following example, __Usakotter__ retweets two tweets with Status IDs 1234123412341234134 and 6789678967896789678.
 
-    $ us -s 1234123412341234134,
-            6789678967896789678
+    $ us -s 1234123412341234134,6789678967896789678
 
 About Suatus ID, see --in-reply-to-new option.
 
