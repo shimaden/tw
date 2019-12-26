@@ -197,7 +197,7 @@ In the following example, __Usakotter__ retweets two tweets with Status IDs 1234
 
     $ us -s 1234123412341234134,6789678967896789678
 
-About Suatus ID, see --in-reply-to-new option.
+About Suatus ID, see __--in-reply-to-new__ option.
 
 ### Favorite (Like)
 
@@ -207,7 +207,7 @@ Like a tweet(s) with a specified Status ID(s).
 
     $ us --fav 1234123412341234134
 
-About Suatus ID, see --in-reply-to-new option.
+About Suatus ID, see __--in-reply-to-new__ option.
 
 ### Unretweet
 
@@ -217,7 +217,7 @@ Candel retweeting.
 
     $ us --unrt 1234123412341234134
 
-About Suatus ID, see --in-reply-to-new option.
+About Suatus ID, see __--in-reply-to-new__ option.
 
 ### Unfavorite
 
@@ -227,7 +227,7 @@ Cancel favoriting (liking).
 
     $ us --unfav 1234123412341234134
 
-About Suatus ID, see --in-reply-to-new option.
+About Suatus ID, see __--in-reply-to-new__ option.
 
 ### Deleta a tweet
 
@@ -235,7 +235,7 @@ __--delete__ STATUS-ID
 
     $ us --delete 1234123412341234134
 
-About Suatus ID, see --in-reply-to-new option.
+About Suatus ID, see __--in-reply-to-new__ option.
 
 ### Display Timelines
 
@@ -255,7 +255,7 @@ Mention Timeline is a collection of tweets to you. Mention is also called "reply
 
     $ us --timeline-mention
 
-#### Retweets of Me Timelin
+#### Retweets of Me Timeline
 
 __--timeline-retweets-of-me__, __--tr__
 
@@ -336,7 +336,7 @@ About Suatus ID, see __--in-reply-to-new__ option.
 
 __--reply-depth__, __--rd__ NUM
 
-If this option is given, __Usakotter__ displays up to NUM tweets in the reply chain from the specified tweet. If 1 is given to NUM, __Usakotter__ displays the destination tweet to which the specified tweet replies. If 2 is given to NUM, __Usakotter__ displays the specified tweet, the destination tweet of the specified tweet, and the destination tweet of the destination tweet of the specified tweet. __Usakotter__ repeats this operation up to NUM times.
+With this option, __Usakotter__ displays up to NUM tweets in the reply chain from the specified tweet. If 1 is given to NUM, __Usakotter__ displays the destination tweet to which the specified tweet replies. If 2 is given to NUM, __Usakotter__ displays the specified tweet, the destination tweet of the specified tweet, and the destination tweet of the destination tweet of the specified tweet. __Usakotter__ repeats this operation up to NUM times.
 
 In the followeing example, __Usakotter__ displays the specified tweet, whose Status ID is 1234123412341234001, and up to five tweets in the reply chain from the specified tweet.
 
