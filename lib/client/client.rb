@@ -132,6 +132,7 @@ module Tw
           :timeline_kind => :home,
           :count => count
       }
+      self.append_official_card_parameters(options)
       options[:max_id  ] = max_id   if max_id
       options[:since_id] = since_id if since_id
 
@@ -163,6 +164,7 @@ module Tw
           :timeline_kind => :mentions,
           :count => count
       }
+      self.append_official_card_parameters(options)
       options[:max_id  ] = max_id   if max_id
       options[:since_id] = since_id if since_id
 
@@ -194,6 +196,7 @@ module Tw
           :timeline_kind => :user,
           :count => count
       }
+      self.append_official_card_parameters(options)
       options[:user_id    ] = user if user.is_a?(Integer)
       options[:screen_name] = user if user.is_a?(String)
       options[:max_id     ] = max_id   if max_id
@@ -227,6 +230,7 @@ module Tw
           :timeline_kind => :retweets_of_me,
           :count => count
       }
+      self.append_official_card_parameters(options)
       options[:max_id  ] = max_id   if max_id
       options[:since_id] = since_id if since_id
 
@@ -260,6 +264,7 @@ module Tw
           :list_name     => listname,
           :count         => count
       }
+      self.append_official_card_parameters(options)
       options[:max_id  ] = max_id   if max_id
       options[:since_id] = since_id if since_id
 
@@ -292,6 +297,7 @@ module Tw
           :q             => query[:q],
           :count         => count
       }
+      self.append_official_card_parameters(options)
       options[:until      ] = query[:until]  if !!query[:until]
       options[:max_id     ] = max_id         if max_id
       options[:since_id   ] = since_id       if since_id
@@ -328,6 +334,7 @@ module Tw
           :timeline_kind => :favorites,
           :count => count
       }
+      self.append_official_card_parameters(options)
       options[:user_id    ] = user if user.is_a?(Integer)
       options[:screen_name] = user if user.is_a?(String)
       options[:max_id     ] = max_id   if max_id
@@ -455,6 +462,7 @@ module Tw
       end
 
       opts = self.get_options_for_one_tweet()
+      self.append_official_card_parameters(opts)
 
       followers = self.followers()
       singleTweet = SingleTweet.new(@requester, followers)
@@ -504,6 +512,7 @@ module Tw
       options_[:count]    = options[:count]    if options.has_key?(:count)
       options_[:since_id] = options[:since_id] if options.has_key?(:since_id)
 
+      self.append_official_card_parameters(options_)
       hash = @requester.get(ACTIVITY_ABOUT_ME, options_)
 $stderr.puts("{\"activity\":" + hash.to_json + "}")
       return hash
@@ -1011,6 +1020,17 @@ $stderr.puts("{\"activity\":" + hash.to_json + "}")
         # The :exclude_replies is only supported for JSON and XML responses.
         :exclude_replies     => false,
       }
+    end
+
+    #-------------------------------------------------------
+    # Append some parameters to be needed when behave as an
+    # official Twitter client.
+    #-------------------------------------------------------
+    def append_official_card_parameters(options)
+      options[:include_cards]  = true
+      # 'iPhone-13', 'iPhone-8' and 'Android-10' would be available.
+      options[:cards_platform] = 'iPhone-13'
+      return options
     end
 
   end
