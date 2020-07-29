@@ -13,7 +13,6 @@ require File.expand_path('mentions_timeline', File.dirname(__FILE__))
 require File.expand_path('user_timeline', File.dirname(__FILE__))
 require File.expand_path('retweets_of_me_timeline', File.dirname(__FILE__))
 require File.expand_path('search_timeline', File.dirname(__FILE__))
-require File.expand_path('search_universal_timeline', File.dirname(__FILE__))
 require File.expand_path('lists_statuses_timeline', File.dirname(__FILE__))
 require File.expand_path('favorites_timeline', File.dirname(__FILE__))
 

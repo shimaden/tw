@@ -2,7 +2,7 @@ include ../../../common.mk
 
 #RUBY = home_timeline.rb lists_statuses_timeline.rb mentions_timeline.rb retweets_of_me_timeline.rb search_timeline.rb timeline.rb user_timeline.rb
 
-RUBY = direct_messages_timeline.rb favorites_timeline.rb home_timeline.rb lists_statuses_timeline.rb mentions_timeline.rb retweets_of_me_timeline.rb search_timeline.rb search_universal_timeline.rb timeline.rb user_timeline.rb
+RUBY = direct_messages_timeline.rb favorites_timeline.rb home_timeline.rb lists_statuses_timeline.rb mentions_timeline.rb retweets_of_me_timeline.rb search_timeline.rb timeline.rb user_timeline.rb
 
 client    = client
 timeline  = timeline
